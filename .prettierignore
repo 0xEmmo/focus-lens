@@ -1,11 +1,9 @@
 dist
+dist-ext
 dev-dist
 node_modules
 package-lock.json
 playwright-report
 test-results
-public/data
 docs
 .scratch
-dist-ext
-docs
