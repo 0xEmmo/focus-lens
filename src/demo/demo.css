@@ -400,10 +400,6 @@ body {
   border-top: 1px solid #e6e6e6;
 }
 
-.sheet-panel .sh {
-  display: none;
-}
-
 /* Dialogs */
 .dlg {
   border: 1.5px solid #161616;

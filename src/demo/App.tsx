@@ -126,8 +126,8 @@ export function App() {
             }
           : undefined
       }
-      onClose={phone ? () => setSheet(false) : () => setSaved((s) => ({ ...s, panel: false }))}
-      closeLabel={phone ? 'Collapse the report' : 'Close Focus Lens'}
+      headless={phone}
+      onClose={phone ? undefined : () => setSaved((s) => ({ ...s, panel: false }))}
     />
   )
 
@@ -200,9 +200,10 @@ export function App() {
       )}
 
       <div className={`body${panelShown && !phone ? ' with-panel' : ''}`}>
-        <div className="page">
-          <iframe ref={setFrame} className="sample-frame" src="/sample.html?embed" title="Sample page under audit: Ember Cinemas" />
-        </div>
+        <main className="page">
+          <h1 className="sr-only">Focus Lens demo: a keyboard audit of a sample cinema booking page</h1>
+          <iframe ref={setFrame} className="sample-frame" src="/sample.html" title="Sample page under audit: Ember Cinemas" />
+        </main>
 
         {!phone && saved.panel && <aside className="side">{panel}</aside>}
 
