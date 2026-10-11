@@ -8,7 +8,7 @@
   "author": "Emmanuel Balogun <ebalogunn@gmail.com>",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm run build:ext && tsx scripts/pack-extension.ts && vite build",
     "build:ext": "vite build --config vite.ext.config.ts",
     "preview": "vite preview --port 4175",
     "lint": "eslint .",
@@ -17,7 +17,9 @@
     "test:watch": "vitest",
     "e2e": "playwright test",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "build:web": "vite build",
+    "build:ext:e2e": "FL_E2E=1 vite build --config vite.ext.config.ts"
   },
   "dependencies": {
     "@fontsource-variable/fraunces": "^5.3.0",
@@ -42,6 +44,7 @@
     "eslint": "^10.12.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.7",
+    "fflate": "^0.8.3",
     "globals": "^17.13.0",
     "jsdom": "^29.1.1",
     "prettier": "^3.9.10",
