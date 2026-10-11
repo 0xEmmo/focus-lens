@@ -10,3 +10,5 @@ blob-report
 .vercel
 data/raw
 .scratch
+dist-ext
+public/focus-lens-extension.zip
