@@ -202,16 +202,18 @@ body {
 }
 
 .page {
-  position: relative;
-  /* Keeps the overlay's huge z-index inside the page, under the sheet and dialogs. */
-  isolation: isolate;
-  overflow: auto;
   min-height: 0;
   background: #fbf7f2;
+  display: flex;
 }
 
-.page:focus {
-  outline: none;
+/* The sample is a real page in its own document, the way the extension sees a site. */
+.sample-frame {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
 }
 
 .side {

@@ -5,11 +5,11 @@ import { Icon, Logo } from '../panel/Icon'
 import { Panel } from '../panel/Panel'
 import type { FixSupport } from '../panel/source'
 import { ALL_FIXES, FIX_LABEL, fixFor, type FixKey } from '../sample/fixes'
-import { Sample } from '../sample/Sample'
+import { isEmbedMessage } from '../sample/embed'
 import { About, GetExtension } from './Info'
 import { Dialog } from './Dialog'
 import { useInstallPrompt, useIsPhone } from './hooks'
-import { LocalSource, SAMPLE_URL } from './localSource'
+import { FrameSource, SAMPLE_URL } from './frameSource'
 import { load, save, type Saved } from './storage'
 import { UpdatePrompt } from './UpdatePrompt'
 import './demo.css'
@@ -20,7 +20,10 @@ export function App() {
   const phone = useIsPhone()
   const install = useInstallPrompt()
   const [saved, setSaved] = useState<Saved>(load)
-  const [scroller, setScroller] = useState<HTMLDivElement | null>(null)
+  const [frame, setFrame] = useState<HTMLIFrameElement | null>(null)
+  const [ready, setReady] = useState(false)
+  /** Bumped each time the sample has rendered the fixes we asked for. */
+  const [rendered, setRendered] = useState(0)
   const [summary, setSummary] = useState<AuditResult | null>(null)
   const [sheet, setSheet] = useState(false)
   const [dialog, setDialog] = useState<null | 'about' | 'extension'>(null)
@@ -30,10 +33,34 @@ export function App() {
 
   useEffect(() => save(saved), [saved])
 
-  const source = useMemo(() => (scroller ? new LocalSource(scroller, () => scroller.querySelector('.ember')) : null), [scroller])
+  const source = useMemo(() => (frame ? new FrameSource(frame) : null), [frame])
   useEffect(() => () => source?.destroy(), [source])
 
   const fixed = useMemo(() => new Set(saved.fixed), [saved.fixed])
+  const wanted = useRef(saved.fixed)
+  useEffect(() => {
+    wanted.current = saved.fixed
+  }, [saved.fixed])
+
+  // The sample lives in its own document; tell it which flaws to fix and hear back once it has.
+  useEffect(() => {
+    if (!frame) return
+    const send = () => frame.contentWindow?.postMessage({ type: 'ember:fixes', fixes: wanted.current }, location.origin)
+    const onMessage = (e: MessageEvent) => {
+      if (e.origin !== location.origin || e.source !== frame.contentWindow || !isEmbedMessage(e.data)) return
+      if (e.data.type === 'ember:ready') {
+        send()
+        setReady(true)
+      }
+      if (e.data.type === 'ember:rendered' && e.data.fixes.join('|') === wanted.current.join('|')) setRendered((n) => n + 1)
+    }
+    window.addEventListener('message', onMessage)
+    return () => window.removeEventListener('message', onMessage)
+  }, [frame])
+
+  useEffect(() => {
+    if (ready) frame?.contentWindow?.postMessage({ type: 'ember:fixes', fixes: saved.fixed }, location.origin)
+  }, [ready, frame, saved.fixed])
   const panelShown = phone || saved.panel
 
   useEffect(() => {
@@ -80,13 +107,13 @@ export function App() {
 
   const setLayers = (layers: Layer[]) => setSaved((s) => ({ ...s, layers }))
 
-  const panel = source && (
+  const panel = source && rendered > 0 && (
     <Panel
       source={source}
       host="embercinemas.ng"
       layers={saved.layers}
       onLayers={setLayers}
-      runKey={saved.fixed.join('|')}
+      runKey={rendered}
       autoRun
       fixes={fixes}
       onResult={onResult}
@@ -173,8 +200,8 @@ export function App() {
       )}
 
       <div className={`body${panelShown && !phone ? ' with-panel' : ''}`}>
-        <div className="page" ref={setScroller} role="region" aria-label="Sample page under audit: Ember Cinemas" tabIndex={-1}>
-          <Sample fixed={fixed} />
+        <div className="page">
+          <iframe ref={setFrame} className="sample-frame" src="/sample.html?embed" title="Sample page under audit: Ember Cinemas" />
         </div>
 
         {!phone && saved.panel && <aside className="side">{panel}</aside>}
