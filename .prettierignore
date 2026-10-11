@@ -7,3 +7,5 @@ test-results
 public/data
 docs
 .scratch
+dist-ext
+docs
