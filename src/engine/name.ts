@@ -32,23 +32,29 @@ const NAME_FROM_CONTENT = new Set(['button', 'link', 'checkbox', 'radio', 'tab',
 
 const clean = (s: string | null | undefined) => (s ?? '').replace(/\s+/g, ' ').trim()
 
+// Tag checks, not instanceof: the page may live in another frame (another realm) from the engine.
+const isElement = (n: Node): n is Element => n.nodeType === 1
+const isTag = <T extends Element>(n: Node, tag: string): n is T => isElement(n) && n.tagName === tag
+const isImg = (n: Node): n is HTMLImageElement => isTag(n, 'IMG')
+const isInput = (n: Node): n is HTMLInputElement => isTag(n, 'INPUT')
+
 function textFrom(node: Node, seen: Set<Node>): string {
   if (seen.has(node)) return ''
   seen.add(node)
   if (node.nodeType === Node.TEXT_NODE) return node.textContent ?? ''
-  if (!(node instanceof Element)) return ''
+  if (!isElement(node)) return ''
   if (node.getAttribute('aria-hidden') === 'true') return ''
   const view = node.ownerDocument.defaultView
   if (view && view.getComputedStyle(node).display === 'none') return ''
   const label = clean(node.getAttribute('aria-label'))
   if (label) return label
-  if (node instanceof HTMLImageElement) return node.alt
+  if (isImg(node)) return node.alt
   if (node.tagName === 'svg') return clean(node.querySelector(':scope > title')?.textContent)
-  if (node instanceof HTMLInputElement && ['button', 'submit', 'reset'].includes(node.type)) return node.value
+  if (isInput(node) && ['button', 'submit', 'reset'].includes(node.type)) return node.value
   let out = ''
   for (const child of node.childNodes) {
     const t = textFrom(child, seen)
-    const block = child instanceof Element && view && /^(block|flex|grid|list-item|table)/.test(view.getComputedStyle(child).display)
+    const block = isElement(child) && view && /^(block|flex|grid|list-item|table)/.test(view.getComputedStyle(child).display)
     out += block ? ` ${t} ` : t
   }
   return out
@@ -90,11 +96,11 @@ export function accessibleName(el: Element): NameResult {
     const l = labelsFor(el)
     if (l) return { name: l, source: 'label' }
   }
-  if (el instanceof HTMLInputElement && ['button', 'submit', 'reset'].includes(el.type)) {
+  if (isInput(el) && ['button', 'submit', 'reset'].includes(el.type)) {
     const v = clean(el.value) || (el.type === 'submit' ? 'Submit' : el.type === 'reset' ? 'Reset' : '')
     if (v) return { name: v, source: 'value' }
   }
-  if (el instanceof HTMLImageElement || (el instanceof HTMLInputElement && el.type === 'image')) {
+  if (isImg(el) || (isInput(el) && el.type === 'image')) {
     const alt = clean(el.getAttribute('alt'))
     if (alt) return { name: alt, source: 'alt' }
   }

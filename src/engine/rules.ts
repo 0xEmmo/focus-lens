@@ -261,16 +261,18 @@ export function hiddenFocus(ctx: Context): Finding[] {
   const offenders = new Map<Element, string>()
   const visit = (rules: CSSRuleList) => {
     for (const rule of rules) {
-      if ('cssRules' in rule && !(rule instanceof CSSStyleRule)) {
-        visit((rule as CSSGroupingRule).cssRules)
+      // Duck-typed so it works on a stylesheet from another frame. Media and layer blocks have cssRules but no selector.
+      const style = rule as CSSStyleRule
+      if (typeof style.selectorText !== 'string') {
+        if ('cssRules' in rule) visit((rule as CSSGroupingRule).cssRules)
         continue
       }
-      if (!(rule instanceof CSSStyleRule) || !/:focus/.test(rule.selectorText)) continue
-      const st = rule.style
+      if (!/:focus/.test(style.selectorText)) continue
+      const st = style.style
       const removes = st.outlineStyle === 'none' || st.outline === 'none' || st.outline === '0' || st.outlineWidth === '0px' || st.outlineWidth === '0'
       const replaces = !!(st.boxShadow || st.borderColor || st.backgroundColor || st.textDecoration || st.borderBottomColor || st.color)
       if (!removes || replaces) continue
-      for (const part of rule.selectorText.split(',')) {
+      for (const part of style.selectorText.split(',')) {
         const base = part.replace(/:focus(-visible|-within)?/g, '').trim() || '*'
         try {
           ctx.root.querySelectorAll(base).forEach((el) => {
