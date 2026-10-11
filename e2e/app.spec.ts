@@ -85,7 +85,11 @@ test('works offline once installed', async ({ page, context }) => {
   await expect(sample(page).locator('.ember')).toBeVisible()
   await expect(page.locator('.sheet-sum .mono, .score').first()).toBeVisible()
   await expect(sample(page).locator('.poster img')).toHaveJSProperty('complete', true)
-  expect(await sample(page).locator('.poster img').evaluate((img: HTMLImageElement) => img.naturalWidth)).toBeGreaterThan(0)
+  expect(
+    await sample(page)
+      .locator('.poster img')
+      .evaluate((img: HTMLImageElement) => img.naturalWidth),
+  ).toBeGreaterThan(0)
   await context.setOffline(false)
 })
 

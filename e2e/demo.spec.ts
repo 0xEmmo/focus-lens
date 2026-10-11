@@ -93,8 +93,15 @@ test('layer toggles change the overlay and are remembered', async ({ page }, inf
 test('exports a Markdown report', async ({ page }, info) => {
   await open(page)
   await showReport(page, info)
-  await panel(page).getByRole('button', { name: /Export report/ }).click()
-  const [download] = await Promise.all([page.waitForEvent('download'), panel(page).getByRole('button', { name: /Markdown/ }).click()])
+  await panel(page)
+    .getByRole('button', { name: /Export report/ })
+    .click()
+  const [download] = await Promise.all([
+    page.waitForEvent('download'),
+    panel(page)
+      .getByRole('button', { name: /Markdown/ })
+      .click(),
+  ])
   expect(download.suggestedFilename()).toMatch(/^focus-lens-embercinemas\.ng-\d{4}-\d{2}-\d{2}\.md$/)
   const text = await (await download.createReadStream()).toArray()
   const md = Buffer.concat(text).toString('utf8')
@@ -105,7 +112,9 @@ test('exports a Markdown report', async ({ page }, info) => {
 test('copies a GitHub issue to the clipboard', async ({ page }, info) => {
   test.skip(isPhone(info), 'Clipboard permissions are granted on the desktop project')
   await open(page)
-  await panel(page).getByRole('button', { name: /Copy as GitHub issue/ }).click()
+  await panel(page)
+    .getByRole('button', { name: /Copy as GitHub issue/ })
+    .click()
   await expect(panel(page).locator('.note')).toContainText('Copied')
   expect(await page.evaluate(() => navigator.clipboard.readText())).toContain('a11y: 9 keyboard and contrast issues on embercinemas.ng')
 })
@@ -113,7 +122,9 @@ test('copies a GitHub issue to the clipboard', async ({ page }, info) => {
 test('"Show on page" outlines the problem', async ({ page }, info) => {
   await open(page)
   await showReport(page, info)
-  await panel(page).getByRole('button', { name: /Focus jumps to “Terms”/ }).click()
+  await panel(page)
+    .getByRole('button', { name: /Focus jumps to “Terms”/ })
+    .click()
   await panel(page).getByRole('button', { name: 'Show on page' }).click()
   await expect(overlay(page).locator('.focus')).toHaveCount(1)
   await expect(sample(page).locator('.foot').getByRole('link', { name: 'Terms' })).toBeInViewport()
