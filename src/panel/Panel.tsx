@@ -20,6 +20,8 @@ interface Props {
   fixes?: FixSupport
   onClose?: () => void
   closeLabel?: string
+  /** Inside a sheet with its own title bar: keep the heading for screen readers only. */
+  headless?: boolean
   /** After "Show on page", so a host can get out of the way (the phone sheet collapses). */
   onShow?: () => void
   /** Called with each result so a host app can show a summary elsewhere. */
@@ -44,7 +46,20 @@ function download(name: string, text: string, type: string) {
   setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
-export function Panel({ source, host, layers, onLayers, runKey, autoRun = false, fixes, onClose, closeLabel = 'Close Focus Lens', onResult, onShow }: Props) {
+export function Panel({
+  source,
+  host,
+  layers,
+  onLayers,
+  runKey,
+  autoRun = false,
+  fixes,
+  onClose,
+  closeLabel = 'Close Focus Lens',
+  onResult,
+  onShow,
+  headless = false,
+}: Props) {
   const [status, setStatus] = useState<Status>({ kind: 'idle' })
   const [open, setOpen] = useState<string | null>(null)
   const [note, setNote] = useState('')
@@ -112,18 +127,24 @@ export function Panel({ source, host, layers, onLayers, runKey, autoRun = false,
 
   return (
     <section className="fl" aria-labelledby="fl-title" data-focus-lens="panel">
-      <header className="sh">
-        <Logo />
-        <h2 id="fl-title">Focus Lens</h2>
-        <span className="mono host" title={host}>
-          {host}
-        </span>
-        {onClose && (
-          <button type="button" className="x" onClick={onClose} aria-label={closeLabel}>
-            <Icon name="close" />
-          </button>
-        )}
-      </header>
+      {headless ? (
+        <h2 id="fl-title" className="sr-only">
+          Focus Lens report for {host}
+        </h2>
+      ) : (
+        <header className="sh">
+          <Logo />
+          <h2 id="fl-title">Focus Lens</h2>
+          <span className="mono host" title={host}>
+            {host}
+          </span>
+          {onClose && (
+            <button type="button" className="x" onClick={onClose} aria-label={closeLabel}>
+              <Icon name="close" />
+            </button>
+          )}
+        </header>
+      )}
 
       <div className="tg" role="group" aria-label="Show on the page">
         {LAYERS.map((l) => (
