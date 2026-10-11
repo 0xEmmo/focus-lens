@@ -8,7 +8,7 @@ import { ALL_FIXES, FIX_LABEL, fixFor, type FixKey } from '../sample/fixes'
 import { Sample } from '../sample/Sample'
 import { About, GetExtension } from './Info'
 import { Dialog } from './Dialog'
-import { useInstallPrompt, useIsPhone, useReducedMotion } from './hooks'
+import { useInstallPrompt, useIsPhone } from './hooks'
 import { LocalSource, SAMPLE_URL } from './localSource'
 import { load, save, type Saved } from './storage'
 import { UpdatePrompt } from './UpdatePrompt'
@@ -18,7 +18,6 @@ const URL_PATH = SAMPLE_URL.replace('https://embercinemas.ng', '')
 
 export function App() {
   const phone = useIsPhone()
-  const reduced = useReducedMotion()
   const install = useInstallPrompt()
   const [saved, setSaved] = useState<Saved>(load)
   const [scroller, setScroller] = useState<HTMLDivElement | null>(null)
@@ -27,24 +26,10 @@ export function App() {
   const [dialog, setDialog] = useState<null | 'about' | 'extension'>(null)
   const [announce, setAnnounce] = useState('')
   const lastFix = useRef<FixKey | null>(null)
-  const reducedRef = useRef(reduced)
-  useEffect(() => {
-    reducedRef.current = reduced
-  }, [reduced])
 
   useEffect(() => save(saved), [saved])
 
-  const source = useMemo(
-    () =>
-      scroller
-        ? new LocalSource(
-            scroller,
-            () => scroller.querySelector('.ember'),
-            () => reducedRef.current,
-          )
-        : null,
-    [scroller],
-  )
+  const source = useMemo(() => (scroller ? new LocalSource(scroller, () => scroller.querySelector('.ember')) : null), [scroller])
   useEffect(() => () => source?.destroy(), [source])
 
   const fixed = useMemo(() => new Set(saved.fixed), [saved.fixed])

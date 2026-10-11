@@ -13,12 +13,10 @@ export class LocalSource implements AuditSource {
   private layers: readonly Layer[] = []
   private readonly scroller: HTMLElement
   private readonly root: () => Element | null
-  private readonly reduced: () => boolean
 
-  constructor(scroller: HTMLElement, root: () => Element | null, reducedMotion: () => boolean) {
+  constructor(scroller: HTMLElement, root: () => Element | null) {
     this.scroller = scroller
     this.root = root
-    this.reduced = reducedMotion
   }
 
   async run(): Promise<AuditResult> {
@@ -42,7 +40,8 @@ export class LocalSource implements AuditSource {
   highlight(id: string | null) {
     this.overlay?.highlight(id)
     const el = id ? this.elements?.issues.get(id)?.[0] : null
-    if (el && el.isConnected) el.scrollIntoView({ block: 'center', inline: 'nearest', behavior: this.reduced() ? 'auto' : 'smooth' })
+    if (el && el.isConnected)
+      el.scrollIntoView({ block: 'center', inline: 'nearest', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
   }
 
   elementsFor(id: string): Element[] {
