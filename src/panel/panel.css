@@ -1,5 +1,6 @@
 /* Focus Lens panel: black, white and safety yellow. Shared by the demo and the extension side panel. */
 .fl {
+  container-type: inline-size;
   --y: #ffd400;
   --k: #161616;
   --red: #c41e14;
@@ -437,6 +438,16 @@
 
 .foot2 > * {
   flex: 1;
+  white-space: nowrap;
+}
+
+/* A narrow side panel: stack the two actions rather than squeeze their labels. */
+@container (max-width: 380px) {
+  .foot2 {
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px 18px;
+  }
 }
 
 .menu-wrap {
