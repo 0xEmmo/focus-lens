@@ -1,0 +1,503 @@
+/* Ember Cinemas: the page under audit. Its own palette, deliberately unlike Focus Lens. */
+.ember {
+  --wine: #7a1f2b;
+  --cream: #fbf7f2;
+  --line: #eadfd3;
+  --field: #d8c9ba;
+  --muted: #6e5b4f;
+  position: relative;
+  min-height: 100%;
+  background: var(--cream);
+  color: #161616;
+  font:
+    14px/1.45 'Atkinson Hyperlegible',
+    system-ui,
+    sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.ember a {
+  color: inherit;
+}
+
+.ember button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.ember :focus-visible {
+  outline: 2.5px solid #1b4dd6;
+  outline-offset: 2px;
+}
+
+.pnav {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  padding: 18px 36px;
+  border-bottom: 1px solid var(--line);
+  font-size: 14.5px;
+}
+
+.ember .plogo {
+  font:
+    800 22px 'Fraunces Variable',
+    Georgia,
+    serif;
+  color: var(--wine);
+  letter-spacing: -0.5px;
+  text-decoration: none;
+}
+
+.plinks {
+  display: flex;
+  gap: 26px;
+}
+
+.plinks a {
+  text-decoration: none;
+}
+
+.plinks a:hover {
+  text-decoration: underline;
+}
+
+.ploc {
+  margin-left: auto;
+}
+
+.ember .signin {
+  border: 1.5px solid var(--wine);
+  color: var(--wine);
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.pmain {
+  flex: 1;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 230px 1fr;
+  gap: 28px;
+  padding: 26px 36px 0;
+}
+
+.poster {
+  height: 300px;
+  border-radius: 6px;
+  background: #2a1414;
+  position: relative;
+  overflow: hidden;
+}
+
+.poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 40% 50%;
+  filter: contrast(1.25) saturate(1.1);
+  display: block;
+}
+
+.poster-tint {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(20, 10, 10, 0) 45%, rgba(30, 12, 12, 0.88) 100%), rgba(227, 125, 51, 0.3);
+  mix-blend-mode: multiply;
+}
+
+.poster-title {
+  position: absolute;
+  left: 16px;
+  bottom: 14px;
+  color: var(--cream);
+}
+
+.poster-title b {
+  display: block;
+  font:
+    800 22px/1 'Fraunces Variable',
+    Georgia,
+    serif;
+}
+
+.poster-title span {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: #e9c9a8;
+  margin-top: 4px;
+}
+
+.ptitle {
+  font:
+    600 36px/1.05 'Fraunces Variable',
+    Georgia,
+    serif;
+  letter-spacing: -0.6px;
+  margin: 0;
+}
+
+.pmeta {
+  color: var(--muted);
+  margin: 6px 0 14px;
+}
+
+.days,
+.times {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.day {
+  border: 1.5px solid var(--field);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  line-height: 1.2;
+  background: #fff;
+  min-width: 52px;
+}
+
+.day b {
+  display: block;
+  font-size: 15px;
+}
+
+.day.on {
+  background: var(--wine);
+  border-color: var(--wine);
+  color: #fff;
+}
+
+.time {
+  background: #fff;
+  border: 1.5px solid var(--field);
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-weight: 700;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.time small {
+  display: block;
+  font-weight: 400;
+  color: #7a6658;
+  font-size: 11.5px;
+}
+
+.time.on {
+  border-color: var(--wine);
+  box-shadow: inset 0 0 0 1px var(--wine);
+}
+
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+  margin-top: 4px;
+}
+
+.fld {
+  display: grid;
+  gap: 3px;
+}
+
+.fld.grow {
+  flex: 1 1 220px;
+  max-width: 280px;
+}
+
+.fld label,
+.fld-gap {
+  font-size: 12px;
+  color: var(--muted);
+  min-height: 17px;
+}
+
+.sel,
+.inp {
+  height: 42px;
+  border: 1.5px solid var(--field);
+  border-radius: 6px;
+  background: #fff;
+  padding: 0 12px;
+  font: inherit;
+  color: #161616;
+}
+
+.sel {
+  width: 128px;
+}
+
+.inp::placeholder {
+  color: #a4968a;
+}
+
+.inp[aria-invalid='true'] {
+  border-color: #b3261e;
+}
+
+.ember .pay {
+  height: 42px;
+  border: 0;
+  border-radius: 6px;
+  background: #e37d33;
+  color: #fff;
+  font-weight: 700;
+  padding: 0 20px;
+  font-size: 15px;
+}
+
+.ember .pay.fixed {
+  background: #b85c19;
+}
+
+.err {
+  flex-basis: 100%;
+  margin: 0;
+  color: #b3261e;
+  font-size: 13px;
+}
+
+.booked {
+  display: grid;
+  gap: 4px;
+  justify-items: start;
+  background: #fff;
+  border: 1.5px solid var(--field);
+  border-radius: 8px;
+  padding: 12px 14px;
+  max-width: 520px;
+}
+
+.ember .link {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--wine);
+  text-decoration: underline;
+  font-weight: 700;
+}
+
+.about-film {
+  padding: 28px 36px 120px;
+  max-width: 720px;
+}
+
+.about-film h2,
+.about-film h3 {
+  font:
+    600 20px 'Fraunces Variable',
+    Georgia,
+    serif;
+  margin: 0 0 6px;
+}
+
+.about-film p {
+  margin: 0;
+  color: #3d3029;
+}
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  padding: 16px 36px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.chat {
+  position: absolute;
+  right: 28px;
+  bottom: 66px;
+  width: 280px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e3d6c8;
+  box-shadow: 0 10px 30px -10px rgba(60, 30, 10, 0.3);
+  overflow: hidden;
+  z-index: 2;
+}
+
+.ember.standalone .chat,
+.ember.standalone .chat-launch {
+  position: fixed;
+}
+
+.chat-h {
+  background: var(--wine);
+  color: #fff;
+  padding: 10px 14px;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-who {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chat-who img,
+.chat-launch img {
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
+.ember .chat-x {
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: none;
+  border: 0;
+  color: #fff;
+  font-size: 15px;
+}
+
+.chat-m {
+  padding: 12px 14px 4px;
+  font-size: 13px;
+  color: #4a3a30;
+  max-height: 150px;
+  overflow: auto;
+}
+
+.bub {
+  background: #f5ede4;
+  border-radius: 10px;
+  padding: 8px 10px;
+  margin: 0 0 8px;
+}
+
+.bub.you {
+  background: #f3e3e5;
+  margin-left: 30px;
+}
+
+.chat-row {
+  display: flex;
+  gap: 8px;
+  padding: 0 14px 12px;
+}
+
+.ci {
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  border: 1.5px solid var(--field);
+  border-radius: 6px;
+  padding: 0 10px;
+  font: inherit;
+}
+
+.ci::placeholder {
+  color: #8a7a6e;
+}
+
+.ember .send {
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 6px;
+  border: 0;
+  background: var(--wine);
+  color: #fff;
+  font-weight: 700;
+}
+
+.ember .chat-launch {
+  position: absolute;
+  right: 28px;
+  bottom: 66px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--wine);
+  color: #fff;
+  font-weight: 700;
+  padding: 6px 16px 6px 6px;
+  box-shadow: 0 10px 24px -10px rgba(60, 30, 10, 0.5);
+}
+
+.ember-toast {
+  position: absolute;
+  left: 50%;
+  top: 76px;
+  transform: translateX(-50%);
+  background: #161616;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  z-index: 3;
+}
+
+.standalone .ember-toast {
+  position: fixed;
+}
+
+@media (max-width: 720px) {
+  .pnav {
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    padding: 14px 18px;
+  }
+  .plinks {
+    order: 3;
+    width: 100%;
+    gap: 20px;
+  }
+  .ploc {
+    font-size: 13px;
+  }
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 18px 18px 0;
+  }
+  .poster {
+    height: 190px;
+  }
+  .ptitle {
+    font-size: 30px;
+  }
+  .fld.grow {
+    max-width: none;
+  }
+  .pay {
+    flex: 1 1 100%;
+  }
+  .about-film {
+    padding: 22px 18px 330px;
+  }
+  .foot {
+    padding: 14px 18px;
+  }
+  .chat {
+    right: 12px;
+    left: 12px;
+    width: auto;
+    bottom: 64px;
+  }
+  .chat-launch {
+    right: 12px;
+  }
+}
