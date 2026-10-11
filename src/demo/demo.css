@@ -203,6 +203,8 @@ body {
 
 .page {
   position: relative;
+  /* Keeps the overlay's huge z-index inside the page, under the sheet and dialogs. */
+  isolation: isolate;
   overflow: auto;
   min-height: 0;
   background: #fbf7f2;

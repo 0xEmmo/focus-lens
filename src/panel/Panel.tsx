@@ -20,6 +20,8 @@ interface Props {
   fixes?: FixSupport
   onClose?: () => void
   closeLabel?: string
+  /** After "Show on page", so a host can get out of the way (the phone sheet collapses). */
+  onShow?: () => void
   /** Called with each result so a host app can show a summary elsewhere. */
   onResult?: (result: AuditResult | null) => void
 }
@@ -42,7 +44,7 @@ function download(name: string, text: string, type: string) {
   setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
-export function Panel({ source, host, layers, onLayers, runKey, autoRun = false, fixes, onClose, closeLabel = 'Close Focus Lens', onResult }: Props) {
+export function Panel({ source, host, layers, onLayers, runKey, autoRun = false, fixes, onClose, closeLabel = 'Close Focus Lens', onResult, onShow }: Props) {
   const [status, setStatus] = useState<Status>({ kind: 'idle' })
   const [open, setOpen] = useState<string | null>(null)
   const [note, setNote] = useState('')
@@ -214,7 +216,10 @@ export function Panel({ source, host, layers, onLayers, runKey, autoRun = false,
                     setOpen(next)
                     source.highlight(next)
                   }}
-                  onShow={() => source.highlight(issue.id)}
+                  onShow={() => {
+                    source.highlight(issue.id)
+                    onShow?.()
+                  }}
                   onCopy={() => void copyIssue(issue.id)}
                   fixLabel={fixes?.label(issue) ?? null}
                   onFix={fixes ? () => fixes.apply(issue) : undefined}

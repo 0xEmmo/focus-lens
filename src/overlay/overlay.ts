@@ -193,7 +193,10 @@ export function createOverlay(container: HTMLElement | null = null): Overlay {
     if (layers.has('issues')) {
       const placed: Box[] = []
       const width = container ? container.clientWidth : doc.documentElement.clientWidth
+      // On a narrow page every label at once is noise: show only the one being looked at.
+      const narrow = width < 600
       for (const issue of result.issues) {
+        if (narrow && issue.id !== focus) continue
         // Structure issues only get labels when you're looking at structure.
         if ((issue.rule === 'heading-skip' || issue.rule === 'no-main') && !layers.has('headings')) continue
         const els = elements.issues.get(issue.id) ?? []

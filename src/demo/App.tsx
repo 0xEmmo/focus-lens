@@ -26,6 +26,7 @@ export function App() {
   const [dialog, setDialog] = useState<null | 'about' | 'extension'>(null)
   const [announce, setAnnounce] = useState('')
   const lastFix = useRef<FixKey | null>(null)
+  const sheetBar = useRef<HTMLButtonElement>(null)
 
   useEffect(() => save(saved), [saved])
 
@@ -89,6 +90,15 @@ export function App() {
       autoRun
       fixes={fixes}
       onResult={onResult}
+      onShow={
+        phone
+          ? () => {
+              setSheet(false)
+              // The button that was pressed is now hidden; keep focus somewhere sensible.
+              requestAnimationFrame(() => sheetBar.current?.focus())
+            }
+          : undefined
+      }
       onClose={phone ? () => setSheet(false) : () => setSaved((s) => ({ ...s, panel: false }))}
       closeLabel={phone ? 'Collapse the report' : 'Close Focus Lens'}
     />
@@ -171,7 +181,7 @@ export function App() {
 
         {phone && (
           <div className={`sheet${sheet ? ' open' : ''}`}>
-            <button type="button" className="sheet-bar" aria-expanded={sheet} aria-controls="sheet-panel" onClick={() => setSheet((o) => !o)}>
+            <button type="button" ref={sheetBar} className="sheet-bar" aria-expanded={sheet} aria-controls="sheet-panel" onClick={() => setSheet((o) => !o)}>
               <span className="grab" aria-hidden="true" />
               <Logo size={24} />
               <span className="sheet-sum">

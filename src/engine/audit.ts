@@ -15,7 +15,20 @@ export function audit(doc: Document = document, root: Element = doc.documentElem
   const index = new Map<Element, number>(order.map((el, i) => [el, i + 1]))
   const ctx: Context = { doc, root, order, stop: (el) => index.get(el) }
 
+  // Focus moves during the trap check, and pages scroll to what they focus. Put everything back.
+  const view = doc.defaultView
+  const scrolled: [Element, number, number][] = []
+  for (let n: Element | null = root; n; n = n.parentElement) if (n.scrollTop || n.scrollLeft) scrolled.push([n, n.scrollLeft, n.scrollTop])
+  const page = view ? [view.scrollX, view.scrollY] : [0, 0]
+
   const findings = RULES.flatMap((rule) => rule(ctx))
+
+  for (let n: Element | null = root; n; n = n.parentElement) {
+    const was = scrolled.find(([el]) => el === n)
+    if (n.scrollLeft !== (was?.[1] ?? 0)) n.scrollLeft = was?.[1] ?? 0
+    if (n.scrollTop !== (was?.[2] ?? 0)) n.scrollTop = was?.[2] ?? 0
+  }
+  if (view && (view.scrollX !== page[0] || view.scrollY !== page[1])) view.scrollTo(page[0]!, page[1]!)
   // Worst first; a trap outranks other criticals because it blocks everything after it.
   const weight = (r: string) => (r === 'focus-trap' ? 0 : 1)
   findings.sort(
