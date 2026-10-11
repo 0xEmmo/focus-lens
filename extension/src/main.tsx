@@ -1,0 +1,14 @@
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import '@fontsource/atkinson-hyperlegible/400.css'
+import '@fontsource/atkinson-hyperlegible/700.css'
+import '@fontsource/atkinson-hyperlegible-mono/400.css'
+import '@fontsource/atkinson-hyperlegible-mono/700.css'
+import './sidepanel.css'
+import { SidePanel } from './SidePanel'
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <SidePanel />
+  </StrictMode>,
+)
