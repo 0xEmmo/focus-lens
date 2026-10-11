@@ -7,7 +7,7 @@ It ships two ways from one codebase:
 - **A Chrome extension** (Manifest V3, side panel) that audits whatever tab you're on.
 - **A live demo** you can open on any phone or laptop: a deliberately broken cinema booking page with the same panel beside it, where you can fix each flaw and watch the audit change. It installs as an app and works offline.
 
-**Live demo: https://focus-lens.vercel.app**
+**Live demo: https://focus-lens-theta.vercel.app**
 
 ![Focus Lens auditing the Ember Cinemas sample page: numbered tab stops, a dashed red loop around a chat widget that traps focus, and the report panel listing nine issues](docs/desktop.png)
 
