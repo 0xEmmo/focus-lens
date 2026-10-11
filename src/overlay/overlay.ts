@@ -57,10 +57,10 @@ export function calloutText(issue: Issue): string {
 /**
  * Draws Focus Lens over a page. Lives in a shadow root so the page's CSS can't
  * restyle it and ours can't leak out; never takes pointer events.
- * `container` is a scrolling element to draw inside, or null for the whole page.
+ * `container` is a scrolling element to draw inside, or null for the whole
+ * page of `doc` (which may be a frame's document).
  */
-export function createOverlay(container: HTMLElement | null = null): Overlay {
-  const doc = container?.ownerDocument ?? document
+export function createOverlay(container: HTMLElement | null = null, doc: Document = container?.ownerDocument ?? document): Overlay {
   const host = doc.createElement('div')
   host.setAttribute(IGNORE_ATTR, 'overlay')
   host.setAttribute('aria-hidden', 'true')
