@@ -1,0 +1,505 @@
+@import '@fontsource/atkinson-hyperlegible/400.css';
+@import '@fontsource/atkinson-hyperlegible/700.css';
+@import '@fontsource/atkinson-hyperlegible-mono/400.css';
+@import '@fontsource/atkinson-hyperlegible-mono/700.css';
+@import '@fontsource-variable/fraunces';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: #dfe1e5;
+  color: #161616;
+  font:
+    14px/1.45 'Atkinson Hyperlegible',
+    system-ui,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.mono {
+  font-family: 'Atkinson Hyperlegible Mono', ui-monospace, monospace;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.demo :focus-visible {
+  outline: 3px solid #161616;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px #ffd400;
+}
+
+.demo {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* The browser around the page: just enough Chrome to read as "an extension, on a site". */
+.chrome {
+  flex: none;
+}
+
+.tabs {
+  height: 40px;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  padding: 0 12px 0 16px;
+}
+
+.dots {
+  display: flex;
+  gap: 8px;
+  align-self: center;
+  margin-right: 30px;
+}
+
+.dots i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #c3c5c9;
+}
+
+.tab {
+  height: 32px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  border-radius: 8px 8px 0 0;
+  color: #333;
+  width: 240px;
+}
+
+.tab.on {
+  background: #fff;
+}
+
+.fav {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background: #7a1f2b;
+}
+
+.bar-actions {
+  margin-left: auto;
+  align-self: center;
+  display: flex;
+  gap: 6px;
+}
+
+.btn {
+  font:
+    700 13px 'Atkinson Hyperlegible',
+    sans-serif;
+  border: 1.5px solid #161616;
+  background: #fff;
+  color: #161616;
+  border-radius: 6px;
+  padding: 5px 12px;
+  min-height: 32px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  text-decoration: none;
+}
+
+.btn.dark {
+  background: #161616;
+  color: #fff;
+}
+
+.btn:hover {
+  background: #fffbe3;
+}
+
+.btn.dark:hover {
+  background: #333;
+}
+
+.bar {
+  height: 44px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px;
+  border-bottom: 1px solid #d0d2d6;
+}
+
+.url {
+  flex: 1;
+  height: 30px;
+  border-radius: 15px;
+  background: #f1f3f4;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  font-size: 13px;
+  color: #222;
+  gap: 8px;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.url span {
+  color: #666;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ext {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 0;
+  padding: 2px;
+  display: grid;
+  place-items: center;
+  background: none;
+  cursor: pointer;
+}
+
+.ext[aria-pressed='true'] {
+  box-shadow:
+    0 0 0 2px #ffd400,
+    0 0 0 3.5px #161616;
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  position: relative;
+}
+
+.body.with-panel {
+  grid-template-columns: minmax(0, 1fr) clamp(340px, 28vw, 420px);
+}
+
+.page {
+  position: relative;
+  overflow: auto;
+  min-height: 0;
+  background: #fbf7f2;
+}
+
+.page:focus {
+  outline: none;
+}
+
+.side {
+  border-left: 1px solid #d0d2d6;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.reopen {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 5;
+  box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.5);
+}
+
+.announce {
+  position: fixed;
+  left: 50%;
+  top: 96px;
+  transform: translateX(-50%);
+  margin: 0;
+  z-index: 6;
+  pointer-events: none;
+  max-width: min(92vw, 520px);
+}
+
+.announce:not(:empty) {
+  background: #161616;
+  color: #fff;
+  padding: 9px 14px;
+  border-radius: 6px;
+  font-weight: 700;
+  border-left: 5px solid #ffd400;
+  box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.5);
+}
+
+.update {
+  position: fixed;
+  left: 50%;
+  top: 12px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 1.5px solid #161616;
+  border-radius: 8px;
+  padding: 8px 10px 8px 14px;
+  z-index: 7;
+  box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.4);
+}
+
+/* Phone: a slim bar on top and the report as a bottom sheet. */
+.pbar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px 8px 14px;
+  padding-top: max(8px, env(safe-area-inset-top));
+  background: #fff;
+  border-bottom: 1px solid #d0d2d6;
+}
+
+.pbar-t {
+  display: grid;
+  line-height: 1.2;
+  margin-right: auto;
+  min-width: 0;
+}
+
+.pbar-t .mono {
+  font-size: 12px;
+  color: #555;
+}
+
+.icon-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 0;
+  background: none;
+  display: grid;
+  place-items: center;
+  color: #161616;
+  cursor: pointer;
+}
+
+.icon-btn:hover {
+  background: #f1f1f1;
+}
+
+.icon-btn.info {
+  font:
+    italic 700 18px Georgia,
+    serif;
+}
+
+.sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -12px 30px -14px rgba(0, 0, 0, 0.45);
+  border-top: 1.5px solid #161616;
+  display: flex;
+  flex-direction: column;
+  z-index: 4;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.sheet.open {
+  height: min(78dvh, 720px);
+}
+
+.sheet-bar {
+  flex: none;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  background: none;
+  padding: 18px 16px 12px;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 16px 16px 0 0;
+}
+
+.grab {
+  position: absolute;
+  left: 50%;
+  top: 7px;
+  width: 40px;
+  height: 4px;
+  margin-left: -20px;
+  border-radius: 2px;
+  background: #c6c6c6;
+}
+
+.sheet-sum {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-right: auto;
+}
+
+.sheet-sum b {
+  font-size: 16px;
+}
+
+.sheet-sum .crit {
+  color: #fff;
+  background: #c41e14;
+  border-radius: 3px;
+  padding: 0 6px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.sheet-sum .mono {
+  color: #555;
+  font-size: 12px;
+}
+
+.sheet-cta {
+  font-weight: 700;
+  border: 1.5px solid #161616;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.sheet-panel {
+  flex: 1;
+  min-height: 0;
+  border-top: 1px solid #e6e6e6;
+}
+
+.sheet-panel .sh {
+  display: none;
+}
+
+/* Dialogs */
+.dlg {
+  border: 1.5px solid #161616;
+  border-radius: 12px;
+  padding: 0;
+  width: min(620px, calc(100vw - 24px));
+  max-height: calc(100dvh - 32px);
+  color: #161616;
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.5);
+}
+
+.dlg::backdrop {
+  background: rgba(22, 22, 22, 0.55);
+}
+
+.dlg-in header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 10px 12px 22px;
+  border-bottom: 1px solid #e6e6e6;
+  position: sticky;
+  top: 0;
+  background: #fff;
+}
+
+.dlg h2 {
+  margin: 0;
+  font-size: 19px;
+}
+
+.info-body {
+  padding: 4px 22px 22px;
+}
+
+.info-body h3 {
+  font-size: 15px;
+  margin: 18px 0 6px;
+}
+
+.info-body p {
+  margin: 10px 0 0;
+}
+
+.info-body code {
+  font:
+    13px 'Atkinson Hyperlegible Mono',
+    monospace;
+  background: #f3f3f3;
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+.info-body a:not(.btn) {
+  color: #161616;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 2px;
+}
+
+.info-fig {
+  margin: 16px 0 0;
+}
+
+.info-fig img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+.info-fig figcaption,
+.small {
+  font-size: 12.5px;
+  color: #555;
+  margin-top: 6px;
+}
+
+.checks,
+.credits {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+}
+
+.steps {
+  padding-left: 22px;
+  display: grid;
+  gap: 10px;
+  margin: 14px 0 0;
+}
+
+@media (max-width: 899px) {
+  .page {
+    padding-bottom: 76px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sheet {
+    transition: height 0.22s ease;
+  }
+}
