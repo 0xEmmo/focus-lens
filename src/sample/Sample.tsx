@@ -4,8 +4,6 @@ import './sample.css'
 
 interface Props {
   fixed: ReadonlySet<FixKey>
-  /** Standalone pages pin the chat to the window, like a real site would. */
-  standalone?: boolean
 }
 
 const DAYS = [
@@ -33,7 +31,7 @@ const REPLIES = [
  * built in on purpose. Each flaw can be fixed independently via `fixed`, so
  * the demo can show the audit change as you repair the page.
  */
-export function Sample({ fixed, standalone = false }: Props) {
+export function Sample({ fixed }: Props) {
   const has = (k: FixKey) => fixed.has(k)
   const [day, setDay] = useState('sun')
   const [time, setTime] = useState('17:30')
@@ -102,7 +100,7 @@ export function Sample({ fixed, standalone = false }: Props) {
   const total = tickets * PRICE
 
   return (
-    <div className={`ember${standalone ? ' standalone' : ''}`} lang="en-NG">
+    <div className="ember" lang="en-NG">
       {/* A stylesheet the audit can read: the focus-ring flaw lives here on purpose. */}
       {!has('signin-focus') && <style>{`.ember .signin:focus { outline: none; }`}</style>}
       <header className="pnav">
@@ -121,7 +119,7 @@ export function Sample({ fixed, standalone = false }: Props) {
           </a>
         </nav>
         <span className="ploc">Lekki Phase 1 ▾</span>
-        <a href="#" className="signin" onClick={nav}>
+        <a href="#" className="signin" onClick={nav} data-fix="signin-focus">
           Sign in
         </a>
       </header>
