@@ -101,7 +101,7 @@ describe('audit', () => {
     expect(byRule('positive-tabindex').title).toBe('Focus jumps to “Terms”, then back')
     expect(byRule('unreachable').title).toBe('“20:15” can\u2019t be reached by keyboard'.replace('\u2019', "'"))
     const c = byRule('contrast')
-    expect(c.title).toBe('“Pay ₦7,500” text is 2.8:1, fails AA')
+    expect(c.title).toBe('“Pay ₦7,500” text is 2.89:1, fails AA')
     expect(c.contrast).toMatchObject({ fg: '#FFFFFF', bg: '#E37D33', required: 4.5 })
     expect(c.contrast!.fix!.change).toBe('background')
     expect(byRule('focus-hidden').title).toBe('No focus ring on “Sign in”')

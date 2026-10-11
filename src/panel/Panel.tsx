@@ -181,12 +181,12 @@ export function Panel({ source, host, layers, onLayers, runKey, autoRun = false,
           </div>
           <div className="rerun">
             <span className="mono">
-              Checked in {result.ms} ms{fixes && fixes.fixed > 0 ? ` · ${fixes.fixed} of ${fixes.total} flaws fixed` : ''}
+              Checked in {result.ms} ms{fixes && fixes.fixed > 0 ? ` · ${fixes.fixed}/${fixes.total} fixed` : ''}
             </span>
             <span className="rerun-actions">
               {fixes && fixes.fixed > 0 && (
                 <button type="button" className="act" onClick={fixes.reset}>
-                  <Icon name="undo" size={14} /> Restore flaws
+                  <Icon name="undo" size={14} /> Undo fixes
                 </button>
               )}
               <button type="button" className="act" onClick={() => void run()}>

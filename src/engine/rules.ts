@@ -1,4 +1,4 @@
-import { composite, contrastRatio, isLargeText, parseColor, suggestFix, toHex, type RGBA } from './color'
+import { composite, contrastRatio, formatRatio, isLargeText, parseColor, suggestFix, toHex, type RGBA } from './color'
 import { cssPath, isIgnored, isRendered, isTabbable, tabIndexOf, visibleText } from './dom'
 import { accessibleName, roleOf } from './name'
 import { commonAncestor, findTraps } from './traps'
@@ -228,7 +228,7 @@ export function contrast(ctx: Context): Finding[] {
     groups.set(key, {
       rule: 'contrast',
       severity: ratio < 3 ? 'serious' : 'moderate',
-      title: `${quote(text)} text is ${(Math.floor(ratio * 10) / 10).toFixed(1)}:1, fails AA`,
+      title: `${quote(text)} text is ${formatRatio(ratio)}, fails AA`,
       wcag: ['1.4.3 Contrast (Minimum)'],
       selector: cssPath(el),
       stops: n ? [n] : [],

@@ -236,6 +236,7 @@
 
 .rerun-actions {
   display: flex;
+  white-space: nowrap;
   gap: 2px;
 }
 

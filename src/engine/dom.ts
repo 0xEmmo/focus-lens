@@ -77,6 +77,8 @@ export function cssPath(el: Element): string {
 
 /** What a sighted keyboard user would read on the element, trimmed for display. */
 export function visibleText(el: Element, max = 40): string {
-  const t = (el.textContent ?? '').replace(/\s+/g, ' ').trim()
+  // innerText keeps the gaps between block children ("20:15 Screen 2", not "20:15Screen 2"); jsdom lacks it.
+  const raw = (el as HTMLElement).innerText ?? el.textContent ?? ''
+  const t = raw.replace(/\s+/g, ' ').trim()
   return t.length > max ? t.slice(0, max - 1) + '…' : t
 }
